@@ -1,0 +1,8 @@
+scikit-learn
+pandas
+numpy
+psycopg2-binary
+pymongo
+pytest
+requests
+python-dotenv

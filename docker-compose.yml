@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: cronicas_db
+    environment:
+      POSTGRES_DB: cronicas
+      POSTGRES_USER: cronicas_user
+      POSTGRES_PASSWORD: cronicas_pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5417:5432"
+
+  app:
+    build: .
+    container_name: cronicas_app
+    depends_on:
+      - db
+    environment:
+      # Ajuste a DSN conforme seu adapter
+      DATABASE_URL: postgres://cronicas_user:cronicas_pass@db:5417/cronicas
+      # Opcional: se usar Mongo
+      MONGO_URI: mongodb://mongo:27017
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: cronicas
+
+  mongo:
+    image: mongo:6
+    container_name: cronicas_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  pgdata:
+  mongodata:
+
+
